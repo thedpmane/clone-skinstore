@@ -12,8 +12,6 @@ In the construct week, I works for five days and cloned some parts of the origin
 Following are the list of pages that i built :
 
 Homepage
-Women's product page
-Men's product page
 A page for displaying the products
 A page for displaying the products details
 Importable and Exportable components
