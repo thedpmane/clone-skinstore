@@ -93,7 +93,7 @@ export default function Navbar() {
   const { isOpen, onToggle } = useDisclosure();
 
   return (
-    <Box>
+    <Box  w={"90%"} margin={"auto"}>
       <Flex
         bg={useColorModeValue("white", "gray.800")}
         color={useColorModeValue("gray.600", "white")}
@@ -130,6 +130,7 @@ export default function Navbar() {
           </Box>
 
           <Flex display={{ base: "none", md: "flex" }} ml={10}>
+           
             <DesktopNav />
           </Flex>
         </Flex>
@@ -329,22 +330,22 @@ interface NavItem {
 
 const NAV_ITEMS: Array<NavItem> = [
   {
-    label: "Inspiration",
+    label: "Skin Care",
     children: [
       {
-        label: "Explore Design Work",
-        subLabel: "Trending Design to inspire you",
+        label: "Popular Categories",
+        subLabel: "View all Skin Care",
         href: "#"
       },
       {
         label: "New & Noteworthy",
-        subLabel: "Up-and-coming Designers",
+        subLabel: "New in",
         href: "#"
       }
     ]
   },
   {
-    label: "Find Work",
+    label: "Hair",
     children: [
       {
         label: "Job Board",
@@ -359,11 +360,28 @@ const NAV_ITEMS: Array<NavItem> = [
     ]
   },
   {
-    label: "Learn Design",
+    label: "Makeup",
     href: "#"
   },
   {
-    label: "Hire Designers",
+    label: "Bath & Body",
     href: "#"
-  }
+  },
+  {
+    label: "Holiday",
+    href: "#"
+  },
+  {
+    label: "Brands",
+    href: "#"
+  },
+  {
+    label: "Fragrance",
+    href: "#"
+  },
+  {
+    label: "Self-Care",
+    href: "#"
+  },
+
 ];

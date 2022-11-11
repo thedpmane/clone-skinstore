@@ -44,13 +44,13 @@ export default function Profile() {
         alignItems="center"
         justifyContent="center"
       >
-        <MenuItem>
-          <Button w={[180, 180, 270]}>Login</Button>
-        </MenuItem>
-        <MenuItem>
-          <Button w={[180, 180, 270]}>Register</Button>
-        </MenuItem>
-        <MenuItem>Wishlist</MenuItem>
+      
+          <Button w={[180, 180, 270]}  _hover={{backgroundColor:"cyan"}} backgroundColor="black" marginLeft={"11px"} color="white">Login</Button>
+      
+        
+          <Button w={[180, 180, 270]}  _hover={{backgroundColor:"cyan"}} marginLeft={"11px"}  marginTop={"10px"}>Register</Button>
+
+        <MenuItem marginTop={"10px"}>Wishlist</MenuItem>
         <MenuItem>Your Orders</MenuItem>
         <MenuItem>Your Referrals</MenuItem>
       </MenuList>
