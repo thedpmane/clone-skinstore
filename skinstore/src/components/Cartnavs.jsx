@@ -42,7 +42,7 @@ export default function Profile() {
         onMouseLeave={onClose}
         w={[200, 200, 300]}
       >
-        <MenuItem>
+      
           <Box>
             <Flex>
               <Box p="4">
@@ -51,11 +51,11 @@ export default function Profile() {
               <Spacer />
               <Box p="4">$122</Box>
             </Flex>
-            <Button color="white" borderRadius="none" width="100px" bg="black">
+            <Button color="white" borderRadius="none" width="100px" ml={"20px"} bg="black" _hover={{backgroundColor:"cyan"}}>
               VIEW CART
             </Button>
           </Box>
-        </MenuItem>
+      
         <MenuItem>Your Orders</MenuItem>
         <MenuItem>Your Referrals</MenuItem>
       </MenuList>
