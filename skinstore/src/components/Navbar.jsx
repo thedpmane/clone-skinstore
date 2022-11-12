@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import React, { useState } from "react";
 import {
   Box,
@@ -8,7 +9,6 @@ import {
   Stack,
   Collapse,
   Icon,
-  Link,
   Popover,
   PopoverTrigger,
   InputGroup,
@@ -24,7 +24,7 @@ import {
   Modal,
   ModalOverlay,
   ModalContent,
-  ModalHeader
+  ModalHeader,
 } from "@chakra-ui/react";
 
 import {
@@ -32,7 +32,7 @@ import {
   CloseIcon,
   ChevronDownIcon,
   ChevronRightIcon,
-  SearchIcon
+  SearchIcon,
 } from "@chakra-ui/icons";
 import Profile from "./Profile";
 import Cartnav from "./Cartnavs";
@@ -89,12 +89,20 @@ function BackdropExample() {
     </>
   );
 }
+const navbarcss = {
+  position: "fixed",
+  "z-index": "9999" /*Add this*/,
+  // marginLeft: "5%",
+  top: "0px",
+  borderBottom: "3px solid",
+};
+
 export default function Navbar() {
   const { isOpen, onToggle } = useDisclosure();
 
   return (
-    <Box  w={"90%"} margin={"auto"}>
-      <Flex
+    <Box as="header" style={navbarcss} w={"100%"} >
+      <Flex w={"90%"} margin='auto'
         bg={useColorModeValue("white", "gray.800")}
         color={useColorModeValue("gray.600", "white")}
         minH={"60px"}
@@ -123,14 +131,16 @@ export default function Navbar() {
         </Flex>
         <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }}>
           <Box className="logodiv" cursor="pointer" w={[120, 120, 220]}>
-            <Image
-              src="https://user-images.githubusercontent.com/66964293/165706636-c182a571-3a0a-48a1-a080-bd3843e67831.png"
-              alt="logo not found"
-            />
+          <Link to={`/`}>   <Image
+                src="https://user-images.githubusercontent.com/66964293/165706636-c182a571-3a0a-48a1-a080-bd3843e67831.png"
+                alt="logo not found"
+              />   
+          </Link>
+            
+       
           </Box>
 
           <Flex display={{ base: "none", md: "flex" }} ml={10}>
-           
             <DesktopNav />
           </Flex>
         </Flex>
@@ -186,7 +196,7 @@ const DesktopNav = () => {
                   _hover={{
                     textDecoration: "none",
                     backgroundColor: "black",
-                    color: "white"
+                    color: "white",
                   }}
                 >
                   {navItem.label}
@@ -280,7 +290,7 @@ const MobileNavItem = ({ label, children, href }: NavItem) => {
         justify={"space-between"}
         align={"center"}
         _hover={{
-          textDecoration: "none"
+          textDecoration: "none",
         }}
       >
         <Text
@@ -335,14 +345,14 @@ const NAV_ITEMS: Array<NavItem> = [
       {
         label: "Popular Categories",
         subLabel: "View all Skin Care",
-        href: "#"
+        href: "#",
       },
       {
         label: "New & Noteworthy",
         subLabel: "New in",
-        href: "#"
-      }
-    ]
+        href: "#",
+      },
+    ],
   },
   {
     label: "Hair",
@@ -350,38 +360,37 @@ const NAV_ITEMS: Array<NavItem> = [
       {
         label: "Job Board",
         subLabel: "Find your dream design job",
-        href: "#"
+        href: "#",
       },
       {
         label: "Freelance Projects",
         subLabel: "An exclusive list for contract work",
-        href: "#"
-      }
-    ]
+        href: "#",
+      },
+    ],
   },
   {
     label: "Makeup",
-    href: "#"
+    href: "#",
   },
   {
     label: "Bath & Body",
-    href: "#"
+    href: "#",
   },
   {
     label: "Holiday",
-    href: "#"
+    href: "#",
   },
   {
     label: "Brands",
-    href: "#"
+    href: "#",
   },
   {
     label: "Fragrance",
-    href: "#"
+    href: "#",
   },
   {
     label: "Self-Care",
-    href: "#"
+    href: "#",
   },
-
 ];
