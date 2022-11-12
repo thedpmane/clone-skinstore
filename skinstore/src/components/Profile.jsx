@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 import {
   useDisclosure,
   MenuItem,
@@ -7,7 +9,7 @@ import {
   useColorModeValue,
   Button,
   Flex,
-  Box
+  Box,
 } from "@chakra-ui/react";
 import { BiUser } from "react-icons/bi";
 export default function Profile() {
@@ -27,7 +29,7 @@ export default function Profile() {
         onMouseLeave={onClose}
       >
         <Flex>
-          <Box w="auto" marginRight="3px">
+          <Box w="auto" mr="3px">
             <BiUser size="25px" />
           </Box>
           <Box w="auto" fontSize="20px">
@@ -44,14 +46,29 @@ export default function Profile() {
         alignItems="center"
         justifyContent="center"
       >
-      
-          <Button w={[180, 180, 270]}  _hover={{backgroundColor:"cyan"}} backgroundColor="black" marginLeft={"11px"} color="white">Login</Button>
-      
-        
-          <Button w={[180, 180, 270]}  _hover={{backgroundColor:"cyan"}} marginLeft={"11px"}  marginTop={"10px"}>Register</Button>
-
-        <MenuItem marginTop={"10px"}>Wishlist</MenuItem>
-        <MenuItem>Your Orders</MenuItem>
+        <Link to="/login">
+          <Button
+            w={[180, 180, 270]}
+            _hover={{ backgroundColor: "cyan" }}
+            backgroundColor="black"
+            ml={"11px"}
+            color="white"
+          >
+            Login
+          </Button>
+        </Link>
+        <Link to="/signup">
+          <Button
+            w={[180, 180, 270]}
+            _hover={{ backgroundColor: "cyan" }}
+            ml={"11px"}
+            mt={"10px"}
+          >
+            Register
+          </Button>
+        </Link>
+        <MenuItem mt={"10px"}>Wishlist</MenuItem>
+        <MenuItem>Your Orders </MenuItem>
         <MenuItem>Your Referrals</MenuItem>
       </MenuList>
     </Menu>

@@ -1,6 +1,7 @@
 import React from 'react'
-import Navbar from "./Navbar";
-import Footer from './Footer';
+
+
+import { Link } from "react-router-dom";
 import {
   Box,
   IconButton,
@@ -178,15 +179,9 @@ function Categories() {
     </Box>
   );
 }
-// css for navbar
-const navbarcss ={
-  
-  "position":"fixed",  
-  "z-index":"9999", /*Add this*/
-  "width":"100%",
-  "top":"0px",
-  "borderBottom":"3px solid"
-}
+
+
+
 
 
 
@@ -377,19 +372,22 @@ function BrandandBlog() {
 
 const Home = () => {
   return (<>
-<Box as="header"   
-z-index={1}
-     
-  style={navbarcss}> <Navbar /></Box>
+
      
 <Container pos="relative" maxW='90%' as="main" paddingTop={"80px"}>
+  
+  <Link  to={`/products`}>
   <CaptionCarousel/>
+        </Link>
+  
+   <Link  to={`/products`}>
    <Categories/>
+        </Link>
    <Toptrending/>
    <BrandandBlog />
    </Container>
 
-   <Footer/>
+  
     </>
   )
 }
