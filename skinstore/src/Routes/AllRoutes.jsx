@@ -1,7 +1,8 @@
 import { Route, Routes } from "react-router-dom";
 import Home from "../components/Home";
 import Login from "../components/Login";
-import Products from  "../components/Product";
+import OneProduct from "../components/OneProduct";
+import Products from "../components/Product";
 import Signup from "../components/Signup";
 
 //import PrivateRoute from "../Components/PrivateRoute";
@@ -9,13 +10,12 @@ import Signup from "../components/Signup";
 function AllRoutes() {
   return (
     <div>
-    
       <Routes>
-        <Route path="/" element={<Home/>} />
-        <Route path="/login" element={<Login/>} />
-        <Route path="/login" element={<Signup/>} />
-        <Route path="/products" element={<Products/>} />
-      
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/products" element={<Products />} />
+        <Route path="/products/:id" element={<OneProduct />} />
       </Routes>
     </div>
   );
