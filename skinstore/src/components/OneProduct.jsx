@@ -108,6 +108,7 @@ function Rating({ rating, numReviews }) {
   );
 }
  function OneProduct() {
+ 
   const {singeldata} = UseProductContext();
   return (
     <Container maxW={"7xl"}>
@@ -117,6 +118,7 @@ function Rating({ rating, numReviews }) {
         py={{ base: 18, md: 24 }}
       >
         <Flex>
+          <Box border={'solid'} h='500px' mt='8'ml='12'>
           <Image
             rounded={"md"}
             alt={"product image"}
@@ -124,8 +126,9 @@ function Rating({ rating, numReviews }) {
             fit={"cover"}
             align={"center"}
             w={"100%"}
-            h={{ base: "100%", sm: "400px", lg: "500px" }}
+            h={{ base: "100%", sm: "100%", lg: "100%" }}
           />
+          </Box>
         </Flex>
         <Stack spacing={{ base: 6, md: 10 }}>
           <Box as={"header"}>

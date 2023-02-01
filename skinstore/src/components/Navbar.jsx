@@ -78,7 +78,10 @@ function BackdropExample() {
                 pointerEvents="none"
                 children={<SearchIcon color="gray.500" />}
               />
-              <Input type="tel" placeholder="Search for product or brand..." />
+              <Input
+                type="string"
+                placeholder="Search for product or brand..."
+              />
             </InputGroup>
           </ModalBody>
           <ModalFooter>
@@ -91,7 +94,7 @@ function BackdropExample() {
 }
 const navbarcss = {
   position: "fixed",
-  "z-index": "9999" /*Add this*/,
+  zIndex: "9999" /*Add this*/,
   // marginLeft: "5%",
   top: "0px",
   borderBottom: "3px solid",
@@ -101,8 +104,10 @@ export default function Navbar() {
   const { isOpen, onToggle } = useDisclosure();
 
   return (
-    <Box as="header" style={navbarcss} w={"100%"} >
-      <Flex w={"90%"} margin='auto'
+    <Box as="header" style={navbarcss} w={"100%"}>
+      <Flex
+        w={"90%"}
+        margin="auto"
         bg={useColorModeValue("white", "gray.800")}
         color={useColorModeValue("gray.600", "white")}
         minH={"60px"}
@@ -131,13 +136,13 @@ export default function Navbar() {
         </Flex>
         <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }}>
           <Box className="logodiv" cursor="pointer" w={[120, 120, 220]}>
-          <Link to={`/`}>   <Image
+            <Link to={`/`}>
+              {" "}
+              <Image
                 src="https://user-images.githubusercontent.com/66964293/165706636-c182a571-3a0a-48a1-a080-bd3843e67831.png"
                 alt="logo not found"
-              />   
-          </Link>
-            
-       
+              />
+            </Link>
           </Box>
 
           <Flex display={{ base: "none", md: "flex" }} ml={10}>
@@ -145,15 +150,10 @@ export default function Navbar() {
           </Flex>
         </Flex>
 
-        <Stack
-          flex={{ base: 1, md: 0 }}
-          justify={"flex-end"}
-          direction={"row"}
-          spacing={6}
-        >
+        <Flex flex={{ base: 1, md: 0 }}>
           <Profile />
           <Cartnav />
-        </Stack>
+        </Flex>
       </Flex>
 
       <Collapse in={isOpen} animateOpacity>
