@@ -51,14 +51,16 @@ function Rating({ rating, numReviews }) {
 
 function Products() {
 
-  const {dbdata,OneProductdata} = UseProductContext();
-  console.log(OneProductdata)
+  const { dbdata, OneProductdata, cartitem,setCartitem } = UseProductContext();
+  
   const [datas, setDatas] = useState(dbdata);
   const ref = useRef("");
   const [option, setOption] = useState("");
   function handleChangeoption(e) {
     setOption(ref.current.value);
   }
+
+  // console.log(cartitem)
   useEffect(() => {
     if (option === "discount") {
       setDatas(dbdata);
@@ -74,13 +76,17 @@ function Products() {
     } else {
       setDatas(dbdata);
     }
-  }, [option]);
-
+    localStorage.setItem("cartItems",JSON.stringify(cartitem))
+  },[option, dbdata, datas,cartitem]);
+function setCartitems(data){
+ 
+ setCartitem([...cartitem,data])
+}
   return (
     <Box marginTop={"80px"}>
       <Flex w="90%" margin={"auto"}>
-        <Box  w="21%" mt="14" ml="2">
-          <Image src={img} alt='img not found'/>
+        <Box w="21%" mt="14" ml="2">
+          <Image src={img} alt='img not found' />
 
         </Box>
         <Box w="70%">
@@ -145,74 +151,76 @@ function Products() {
           </Box>
           <SimpleGrid columns={[2, 2, 3]} spacing="20px">
             {datas.map((data, i) => (
-              <NavLink to='/products/${data.id}'><Box key={i} _hover={{ cursor: "pointer" }}>
-              <Flex
-                p={50}
-                w="full"
-                alignItems="center"
-                justifyContent="center"
-                key={i}
-              >
-                <Box maxW="sm" position="relative" onClick={()=>{OneProductdata(data.id)}} >
-                  {data.isNew && (
-                    <Circle
-                      size="10px"
-                      position="absolute"
-                      top={2}
-                      right={2}
-                      bg="red.200"
+              <Box key={i} _hover={{ cursor: "pointer" }}>
+                <Flex
+                  p={50}
+                  w="full"
+                  alignItems="center"
+                  justifyContent="center"
+                  key={i}
+                >
+                 
+                  <Box maxW="sm" position="relative" onClick={() => { OneProductdata(data.id) }} >
+                    {data.isNew && (
+                      <Circle
+                        size="10px"
+                        position="absolute"
+                        top={2}
+                        right={2}
+                        bg="red.200"
+                      />
+                    )}
+                    <NavLink to={`/products/${data.id}`}>
+                    <Image
+                      src={data.src}
+                      alt={`Picture of ${data.name}`}
+                      roundedTop="lg"
                     />
-                  )}
-
-                  <Image
-                    src={data.src}
-                    alt={`Picture of ${data.name}`}
-                    roundedTop="lg"
-                  />
-
-                  <Box p="6">
-                    <Button
-                      borderRadius="none"
-                      border="1px"
-                      borderColor="red"
-                      fontSize="13px"
-                      bg="white"
-                    >
-                      Select Your Gift
-                    </Button>
-                    <Box>
-                      <Box
-                        h="150"
-                        mt="2"
-                        fontSize="xl"
-                        fontWeight="semibold"
-                        display="flex"
-                        alignItems="center"
+                   
+                    <Box p="6">
+                      <Button
+                        borderRadius="none"
+                        border="1px"
+                        borderColor="red"
+                        fontSize="13px"
+                        bg="white"
                       >
-                        {data.name}
+                        Select Your Gift
+                      </Button>
+                      <Box>
+                        <Box
+                          h="150"
+                          mt="2"
+                          fontSize="xl"
+                          fontWeight="semibold"
+                          display="flex"
+                          alignItems="center"
+                        >
+                          {data.name}
+                        </Box>
+                      </Box>
+
+                      <Flex
+                        justifyContent="space-between"
+                        alignContent="center"
+                      >
+                        <Rating
+                          rating={data.rating}
+                          numReviews={data.numReviews}
+                        />
+  
+                        <Box
+                          fontSize="xl"
+                        //   color={useColorModeValue("gray.800", "white")}
+                        ></Box>
+                      </Flex>
+                      <Box fontSize="30px" as="span" color={"gray.600"} mr="2">
+                        $ {data.price.toFixed(2)}
                       </Box>
                     </Box>
-
-                    <Flex
-                      justifyContent="space-between"
-                      alignContent="center"
-                    >
-                      <Rating
-                        rating={data.rating}
-                        numReviews={data.numReviews}
-                      />
-
-                      <Box
-                        fontSize="xl"
-                        //   color={useColorModeValue("gray.800", "white")}
-                      ></Box>
-                    </Flex>
-                    <Box fontSize="30px" as="span" color={"gray.600"} mr="2">
-                      $ {data.price.toFixed(2)}
-                    </Box>
-                  </Box>
-
+                    </NavLink>
                   <Button
+                  onClick={() => {setCartitems(data)}}
                     _hover={{ bg: "cyan" }}
                     marginLeft="20px"
                     w="100%"
@@ -222,15 +230,15 @@ function Products() {
                   >
                     Quick Buy
                   </Button>
-                </Box>
+              </Box>
               </Flex>
-            </Box></NavLink>
+        </Box>
           
             ))}
-          </SimpleGrid>
-        </Box>
-      </Flex>
+      </SimpleGrid>
     </Box>
+      </Flex >
+    </Box >
   );
 }
 

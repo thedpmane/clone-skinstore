@@ -23,10 +23,10 @@ function AppContextProvider({ children }) {
   //   });
   // };
 
-  
+  const [cartitem,setCartitem]=useState([])
   const [singeldata,setSingledata]=useState(null)
   useEffect(() => {
-   console.log(singeldata)
+   
   }, [singeldata])
   function OneProductdata(id){
     const sigleproductdata = dbdata.filter(element => element.id === id);
@@ -35,7 +35,7 @@ function AppContextProvider({ children }) {
   }
   
   return (
-    <AppContext.Provider value={{dbdata,OneProductdata,singeldata}}>
+    <AppContext.Provider value={{dbdata,OneProductdata,singeldata,cartitem,setCartitem}}>
       {children}
     </AppContext.Provider>
   );
