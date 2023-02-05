@@ -26,7 +26,7 @@
 
 
 
-<h3 align="center"><a href=""><strong>Want to see live preview »</strong></a></h3>
+<h3 align="center"><a href="https://clone-skinstore.vercel.app/"><strong>Want to see live preview »</strong></a></h3>
 
 
 <br />
