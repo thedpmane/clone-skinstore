@@ -12,14 +12,24 @@ import {
   Text,
   Link,
 } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import { GrFacebook } from "react-icons/gr";
 import { FcGoogle } from "react-icons/fc";
-import { useReducer, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { UseProductContext } from "../Context/AppContext";
 
 function Signup() {
+  const Navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordsec, setShowPasswordsec] = useState(false);
+
+  const { state, setState } = UseProductContext();
+  const [token, setToken] = useState(
+    localStorage.getItem("skinstoreToken") || null
+  );
+
   const initalState = {
     name: "",
     email: "",
@@ -49,18 +59,55 @@ function Signup() {
   };
 
   const [signupDetails, dispatch] = useReducer(MyReducer, initalState);
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     if (
       signupDetails.password !== "" &&
       signupDetails.confirmPassword !== "" &&
-      signupDetails.password === signupDetails.confirmPassword
+      signupDetails.password === signupDetails.confirmPassword &&
+      signupDetails.moibleNumber.length === 10
     ) {
-      console.log(signupDetails);
+      try {
+        axios
+          .post(
+            "https://splendid-fedora-cow.cyclic.app/register",
+            signupDetails
+          )
+          .then((res) => {
+            alert("Signup Success");
+
+            setState({
+              ...state,
+              isAuth: true,
+              userData: res.data.user,
+              token,
+            });
+
+            localStorage.setItem("skinstoreToken", res.data.token);
+            Navigate("/");
+          });
+      } catch (error) {
+        console.log(error);
+        localStorage.setItem("skinstoreToken", null);
+
+        alert("something went wrong try again with correct details");
+      }
     } else {
-      alert("both password dont match check before sumiting");
+      alert(
+        "both password dont match check before sumiting or number should be 10 digit"
+      );
     }
   };
-  //console.log(signupDetails);
+  useEffect(() => {
+    if (token !== null) {
+      setState({
+        ...state,
+        isAuth: true,
+        token,
+      });
+    }
+  }, [token]);
+
   return (
     <Box pt={["auto", "170px"]} maxW="600px" m="auto">
       <Flex>
@@ -109,123 +156,139 @@ function Signup() {
               </Box>
             </Flex>
           </Stack>
-
-          <Stack p={8} spacing={4}>
-            <FormControl id="fullName" isRequired>
-              <FormLabel>Full Name</FormLabel>
-              <Input
-                type="text"
-                onChange={(e) =>
-                  dispatch({ type: "name", payload: e.target.value })
-                }
-              />
-            </FormControl>
-
-            <FormControl isRequired id="email">
-              <FormLabel>Email address</FormLabel>
-              <Input
-                type="email"
-                onChange={(e) =>
-                  dispatch({ type: "email", payload: e.target.value })
-                }
-              />
-            </FormControl>
-
-            <FormControl id="password" isRequired>
-              <FormLabel>Password</FormLabel>
-              <InputGroup>
+          <form onSubmit={handleSubmit}>
+            <Stack p={8} spacing={4}>
+              <FormControl id="fullName" isRequired>
+                <FormLabel>Full Name</FormLabel>
                 <Input
-                  type={showPassword ? "text" : "password"}
+                  isRequired
+                  type="text"
                   onChange={(e) =>
-                    dispatch({ type: "password", payload: e.target.value })
+                    dispatch({ type: "name", payload: e.target.value })
                   }
                 />
-                <InputRightElement h={"full"}>
-                  <Button
-                    variant={"ghost"}
-                    onClick={() =>
-                      setShowPassword((showPassword) => !showPassword)
-                    }
-                  >
-                    {showPassword ? <ViewIcon /> : <ViewOffIcon />}
-                  </Button>
-                </InputRightElement>
-              </InputGroup>
-            </FormControl>
+              </FormControl>
 
-            <FormControl id="password2" isRequired>
-              <FormLabel>Confirm Password</FormLabel>
-              <InputGroup>
+              <FormControl isRequired id="email">
+                <FormLabel>Email address</FormLabel>
                 <Input
-                  type={showPasswordsec ? "text" : "password"}
+                  type="email"
+                  isRequired
+                  onChange={(e) =>
+                    dispatch({ type: "email", payload: e.target.value })
+                  }
+                />
+              </FormControl>
+
+              <FormControl id="password" isRequired>
+                <FormLabel>Password</FormLabel>
+                <InputGroup>
+                  <Input
+                    isRequired
+                    type={showPassword ? "text" : "password"}
+                    onChange={(e) =>
+                      dispatch({ type: "password", payload: e.target.value })
+                    }
+                  />
+                  <InputRightElement h={"full"}>
+                    <Button
+                      variant={"ghost"}
+                      onClick={() =>
+                        setShowPassword((showPassword) => !showPassword)
+                      }
+                    >
+                      {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                    </Button>
+                  </InputRightElement>
+                </InputGroup>
+              </FormControl>
+
+              <FormControl id="password2" isRequired>
+                <FormLabel>Confirm Password</FormLabel>
+                <InputGroup>
+                  <Input
+                    isRequired
+                    type={showPasswordsec ? "text" : "password"}
+                    onChange={(e) =>
+                      dispatch({
+                        type: "confirmPassword",
+                        payload: e.target.value,
+                      })
+                    }
+                  />
+                  <InputRightElement h={"full"}>
+                    <Button
+                      variant={"ghost"}
+                      onClick={() =>
+                        setShowPasswordsec(
+                          (showPasswordsec) => !showPasswordsec
+                        )
+                      }
+                    >
+                      {showPasswordsec ? <ViewIcon /> : <ViewOffIcon />}
+                    </Button>
+                  </InputRightElement>
+                </InputGroup>
+              </FormControl>
+              <FormControl id="number">
+                <FormLabel>Cell Phone Number</FormLabel>
+                <Input
+                  isRequired
+                  type="number"
+                  maxLength={10}
                   onChange={(e) =>
                     dispatch({
-                      type: "confirmPassword",
-                      payload: e.target.value,
+                      type: "moibleNumber",
+                      payload: (e.target.value = Math.max(
+                        0,
+                        parseInt(e.target.value)
+                      )
+                        .toString()
+                        .slice(0, 10)),
                     })
                   }
                 />
-                <InputRightElement h={"full"}>
-                  <Button
-                    variant={"ghost"}
-                    onClick={() =>
-                      setShowPasswordsec((showPasswordsec) => !showPasswordsec)
-                    }
-                  >
-                    {showPasswordsec ? <ViewIcon /> : <ViewOffIcon />}
-                  </Button>
-                </InputRightElement>
-              </InputGroup>
-            </FormControl>
-            <FormControl id="number">
-              <FormLabel>Cell Phone Number</FormLabel>
-              <Input
-                type="number"
-                maxLength={10}
-                onChange={(e) =>
-                  dispatch({ type: "moibleNumber", payload: e.target.value })
-                }
-              />
-            </FormControl>
+              </FormControl>
 
-            <FormControl id="code">
-              <FormLabel>Referral Code (Optional)</FormLabel>
-              <Input
-                type="text"
-                onChange={(e) =>
-                  dispatch({ type: "referralCode", payload: e.target.value })
-                }
-              />
-            </FormControl>
-            <Stack spacing={10} pt={2}>
-              <Button
-                loadingText="Submitting"
-                size="lg"
-                bg={"black"}
-                color={"white"}
-                _hover={{
-                  bg: "cyan.500",
-                }}
-                disabled={
-                  initalState.name !== "" &&
-                  initalState.email !== "" &&
-                  initalState.password !== "" &&
-                  initalState.confirmPassword !== "" &&
-                  initalState.moibleNumber !== ""
-                }
-                onClick={handleSubmit}
-              >
-                Sign up
-              </Button>
+              <FormControl id="code">
+                <FormLabel>Referral Code (Optional)</FormLabel>
+                <Input
+                  type="text"
+                  onChange={(e) =>
+                    dispatch({ type: "referralCode", payload: e.target.value })
+                  }
+                />
+              </FormControl>
+              <Stack spacing={10} pt={2}>
+                <Button
+                  loadingText="Submitting"
+                  size="lg"
+                  bg={"black"}
+                  color={"white"}
+                  _hover={{
+                    bg: "cyan.500",
+                  }}
+                  isDisabled={
+                    initalState.name !== "" &&
+                    initalState.email !== "" &&
+                    initalState.password !== "" &&
+                    initalState.confirmPassword !== "" &&
+                    initalState.moibleNumber !== ""
+                  }
+                  type="submit"
+                >
+                  Sign up
+                </Button>
+              </Stack>
+              <Stack pt={6}>
+                <Text align={"center"} fontSize="xs">
+                  By proceeding, you are confirming that you agree to our{" "}
+                  <Link fontWeight="semibold">Terms and Conditions</Link> and{" "}
+                  <Link fontWeight="semibold">Privacy Policy</Link>
+                </Text>
+              </Stack>
             </Stack>
-            <Stack pt={6}>
-              <Text align={"center"} fontSize="xs">
-                By proceeding, you are confirming that you agree to our{" "}
-                <Link fontWeight="semibold">Terms and Conditions</Link> and{" "}
-                <Link fontWeight="semibold">Privacy Policy</Link>
-              </Text>
-            </Stack>
-          </Stack>
+          </form>
         </Stack>
       </Flex>{" "}
     </Box>
