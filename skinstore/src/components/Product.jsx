@@ -9,6 +9,7 @@ import {
   Stack,
   Spacer,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import { useRef, useState, useEffect } from "react";
 import { UseProductContext } from "../Context/AppContext";
@@ -16,7 +17,7 @@ import { BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { NavLink } from "react-router-dom";
 //console.log(datas)
-import img from './FilterSection.png'
+import img from "./FilterSection.png";
 function Rating({ rating, numReviews }) {
   return (
     <Box d="flex" alignItems="center">
@@ -47,12 +48,9 @@ function Rating({ rating, numReviews }) {
   );
 }
 
-
-
 function Products() {
-
-  const { dbdata, OneProductdata, cartitem,setCartitem } = UseProductContext();
-  
+  const { dbdata, OneProductdata, cartitem, setCartitem } = UseProductContext();
+  const toast = useToast();
   const [datas, setDatas] = useState(dbdata);
   const ref = useRef("");
   const [option, setOption] = useState("");
@@ -76,18 +74,44 @@ function Products() {
     } else {
       setDatas(dbdata);
     }
-    localStorage.setItem("cartItems",JSON.stringify(cartitem))
-  },[option, dbdata, datas,cartitem]);
-function setCartitems(data){
- 
- setCartitem([...cartitem,data])
-}
+    //localStorage.setItem("cartItems", JSON.stringify(cartitem));
+  }, [option, dbdata, datas, cartitem]);
+  function setCartitems(data) {
+    const found = cartitem.find((element) => element.id == data.id);
+    if (cartitem.length === 0) {
+      setCartitem([...cartitem, data]);
+      toast({
+        title: `Item added to Cart`,
+        status: "success",
+        isClosable: true,
+        position: "top-right",
+      });
+    } else {
+      if (found !== undefined) {
+        toast({
+          title: `This item is already in your cart`,
+          status: "info",
+          isClosable: true,
+          position: "top-right",
+        });
+      } else {
+        toast({
+          title: `Item added to Cart`,
+          status: "success",
+          isClosable: true,
+          position: "top-right",
+        });
+
+        setCartitem([...cartitem, data]);
+      }
+    }
+  }
+
   return (
     <Box marginTop={"80px"}>
       <Flex w="90%" margin={"auto"}>
         <Box w="21%" mt="14" ml="2">
-          <Image src={img} alt='img not found' />
-
+          <Image src={img} alt="img not found" />
         </Box>
         <Box w="70%">
           <Box ml="12" pt="10">
@@ -159,8 +183,13 @@ function setCartitems(data){
                   justifyContent="center"
                   key={i}
                 >
-                 
-                  <Box maxW="sm" position="relative" onClick={() => { OneProductdata(data.id) }} >
+                  <Box
+                    maxW="sm"
+                    position="relative"
+                    onClick={() => {
+                      OneProductdata(data.id);
+                    }}
+                  >
                     {data.isNew && (
                       <Circle
                         size="10px"
@@ -171,74 +200,80 @@ function setCartitems(data){
                       />
                     )}
                     <NavLink to={`/products/${data.id}`}>
-                    <Image
-                      src={data.src}
-                      alt={`Picture of ${data.name}`}
-                      roundedTop="lg"
-                    />
-                   
-                    <Box p="6">
-                      <Button
-                        borderRadius="none"
-                        border="1px"
-                        borderColor="red"
-                        fontSize="13px"
-                        bg="white"
-                      >
-                        Select Your Gift
-                      </Button>
-                      <Box>
-                        <Box
-                          h="150"
-                          mt="2"
-                          fontSize="xl"
-                          fontWeight="semibold"
-                          display="flex"
-                          alignItems="center"
+                      <Image
+                        src={data.src}
+                        alt={`Picture of ${data.name}`}
+                        roundedTop="lg"
+                      />
+
+                      <Box p="6">
+                        <Button
+                          borderRadius="none"
+                          border="1px"
+                          borderColor="red"
+                          fontSize="13px"
+                          bg="white"
                         >
-                          {data.name}
+                          Select Your Gift
+                        </Button>
+                        <Box>
+                          <Box
+                            h="150"
+                            mt="2"
+                            fontSize="xl"
+                            fontWeight="semibold"
+                            display="flex"
+                            alignItems="center"
+                          >
+                            {data.name}
+                          </Box>
+                        </Box>
+
+                        <Flex
+                          justifyContent="space-between"
+                          alignContent="center"
+                        >
+                          <Rating
+                            rating={data.rating}
+                            numReviews={data.numReviews}
+                          />
+
+                          <Box
+                            fontSize="xl"
+                            //   color={useColorModeValue("gray.800", "white")}
+                          ></Box>
+                        </Flex>
+                        <Box
+                          fontSize="30px"
+                          as="span"
+                          color={"gray.600"}
+                          mr="2"
+                        >
+                          $ {data.price.toFixed(2)}
                         </Box>
                       </Box>
-
-                      <Flex
-                        justifyContent="space-between"
-                        alignContent="center"
-                      >
-                        <Rating
-                          rating={data.rating}
-                          numReviews={data.numReviews}
-                        />
-  
-                        <Box
-                          fontSize="xl"
-                        //   color={useColorModeValue("gray.800", "white")}
-                        ></Box>
-                      </Flex>
-                      <Box fontSize="30px" as="span" color={"gray.600"} mr="2">
-                        $ {data.price.toFixed(2)}
-                      </Box>
-                    </Box>
                     </NavLink>
-                  <Button
-                  onClick={() => {setCartitems(data)}}
-                    _hover={{ bg: "cyan" }}
-                    marginLeft="20px"
-                    w="100%"
-                    bg="black"
-                    color="white"
-                    borderRadius="none"
-                  >
-                    Quick Buy
-                  </Button>
+                    <Button
+                      onClick={() => {
+                        setCartitems(data);
+                      }}
+                      _hover={{ bg: "cyan" }}
+                      marginLeft="20px"
+                      w="100%"
+                      bg="black"
+                      color="white"
+                      borderRadius="none"
+                    >
+                      Quick Buy
+                    </Button>
+                  </Box>
+                </Flex>
               </Box>
-              </Flex>
-        </Box>
-          
             ))}
-      </SimpleGrid>
+          </SimpleGrid>
+        </Box>
+      </Flex>
     </Box>
-      </Flex >
-    </Box >
   );
 }
 

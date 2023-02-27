@@ -94,7 +94,7 @@ function BackdropExample() {
 }
 const navbarcss = {
   position: "fixed",
-  zIndex: "9999" /*Add this*/,
+  zIndex: "1" /*Add this*/,
   // marginLeft: "5%",
   top: "0px",
   borderBottom: "3px solid",

@@ -68,7 +68,7 @@ export default function Profile() {
               <label htmlFor="">{cartitem.length} items in your cart</label>
             </Box>
             <Spacer />
-            <Box p="4">${total}</Box>
+            <Box p="4">${Math.trunc(total)}</Box>
           </Flex>
           <Link to={"/cart"}>
             <Button

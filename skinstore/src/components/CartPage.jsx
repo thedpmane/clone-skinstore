@@ -11,6 +11,7 @@ import {
   Spacer,
   Stack,
   CloseButton,
+  useToast,
 } from "@chakra-ui/react";
 // import datas from "../Data.json";
 
@@ -41,23 +42,27 @@ function SelectQuantiy({ qty }) {
   );
 }
 function CartPage() {
+  const toast = useToast();
   const ref = useRef(1);
   const { cartitem, setCartitem } = UseProductContext();
-  const cartdata = JSON.parse(localStorage.getItem("cartItems"));
-  //console.log(cartdata);
-  var total = 0;
-  for (let i = 0; i < cartitem.length; i++) {
-    total += Math.floor(cartitem[i].price * cartitem[i].quantity);
+
+  let total = 0;
+  if (cartitem.length !== 0) {
+    for (let i = 0; i < cartitem.length; i++) {
+      total += Math.floor(cartitem[i].price * cartitem[i].quantity);
+    }
   }
-  // console.log(cartitem,setCartitem);
+
   function RemoveCartItem(id) {
     const result = cartitem.filter((eachitem) => eachitem.id !== id);
     setCartitem(result);
-    localStorage.setItem("cartItems", JSON.stringify(result));
+    toast({
+      title: `Item Removed from Cart`,
+      status: "warning",
+      isClosable: true,
+      position: "top-right",
+    });
   }
-  useEffect(() => {
-    setCartitem(cartdata);
-  }, []);
 
   return (
     <Box ml="200" mt="120px">
@@ -100,7 +105,7 @@ function CartPage() {
 
       <br />
       {cartitem.map((data, i) => (
-        <Box key={data.id} w="70%">
+        <Box key={data.id + i} w="70%">
           <Flex gap="58px" align="center">
             <Box w="80px">
               <Image src={data.src} alt="cart image not found" />
@@ -126,7 +131,7 @@ function CartPage() {
       <Flex w="61%">
         <Spacer />
         <Text fontSize="xl" colorScheme="teal">
-          Cart Subtotal: ${total}
+          Cart Subtotal: ${Math.trunc(total)}
         </Text>
       </Flex>
       <hr width="70%" />

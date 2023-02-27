@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Flex,
   Box,
@@ -9,10 +9,19 @@ import {
   Button,
   Text,
 } from "@chakra-ui/react";
+
 import { GrFacebook } from "react-icons/gr";
 import { FcGoogle } from "react-icons/fc";
-import { useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
+import axios from "axios";
+import { UseProductContext } from "../Context/AppContext";
+
 export default function SimpleCard() {
+  const Navigate = useNavigate();
+  const { state, setState } = UseProductContext();
+  const [token, setToken] = useState(
+    localStorage.getItem("skinstoreToken") || null
+  );
   const initalState = {
     email: "",
     password: "",
@@ -30,9 +39,30 @@ export default function SimpleCard() {
   };
 
   const [loginDetails, dispatch] = useReducer(MyReducer, initalState);
+
   const handleSubmit = () => {
-    console.log(loginDetails);
+    try {
+      axios
+        .post("https://splendid-fedora-cow.cyclic.app/login", loginDetails)
+        .then((res) => {
+          alert("Login Success");
+
+          setState({
+            ...state,
+            isAuth: true,
+            userData: res.data.user,
+            token: res.data.token,
+          });
+          localStorage.setItem("skinstoreToken", res.data.token);
+          Navigate("/");
+        });
+    } catch (error) {
+      console.log(error);
+      alert("something went wrong try again with correct details");
+      localStorage.setItem("skinstoreToken", null);
+    }
   };
+  console.log(state);
   return (
     <Flex gap="124px" mt="120" ml="150">
       <Box>
